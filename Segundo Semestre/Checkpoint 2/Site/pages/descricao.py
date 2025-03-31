@@ -48,7 +48,7 @@ st.write("**RESPON** = Órgão responsável pela estação (exemplo: DAEE-SP, AN
 st.write("**OPERAD** = Operador da estação (quem faz a manutenção e coleta os dados).")
 st.write("**MESMAX, MESMIN** = Mês com maior e menor precipitação.")
 st.write("**BIMMAX, BIMMIN** = Bimestre com maior e menor precipitação. ")
-st.write("**TRIMAX, TRIMIN ** = Trimestre com maior e menor precipitação.")
+st.write("**TRIMAX, TRIMIN** = Trimestre com maior e menor precipitação.")
 st.write("**QUAMAX, QUAMIN** = Quadrimestre com maior e menor precipitação.")
 st.write("**SEMMAX, SEMMIN** = Semestre com maior e menor precipitação.")
 # RIO, DINI, DFIM, ANOINI, ANOFIM, EMOPER, ADKM2, PCBRUT, PCCONS, PCFALH, NANOSF, NSF10PF, N_ANUAL, MED_ANUAL, DP_ANUAL, CV_ANUAL, MIN_ANUAL, MAX_ANUAL, N_JAN, MED_JAN.

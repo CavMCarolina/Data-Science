@@ -41,6 +41,10 @@ st.markdown("""
 
 st.write("Diante dos desafios impostos pelos alagamentos em Ribeirão Preto, a análise detalhada dos dados de precipitação é uma ferramenta fundamental para a proteção da população e o desenvolvimento sustentável da cidade.")
 
+st.header("Correlação com o Dataset:")
+
+st.write("")
+
 st.header("Perguntas Iniciais:")
 st.write("**1-** Existe uma correlação entre o volume de precipitação e a ocorrência de alagamentos?")
 st.write("**2-** Quais são os períodos do ano com maior incidência de chuvas e como isso se relaciona com os alagamentos?")
