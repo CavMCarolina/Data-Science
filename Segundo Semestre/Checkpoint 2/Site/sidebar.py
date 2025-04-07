@@ -23,6 +23,7 @@ def show_sidebar():
     st.sidebar.divider()
 
     st.sidebar.write("📊 **Discussão**")
+    st.sidebar.page_link("pages/padroes.py", label="Padrões Sazonais")
 
     st.sidebar.divider()
 
