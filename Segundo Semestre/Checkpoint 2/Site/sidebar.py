@@ -17,9 +17,7 @@ def show_sidebar():
     st.sidebar.divider()
 
     st.sidebar.write("🔍 **Análise Exploratória**")
-    st.sidebar.page_link("pages/medidas_centrais.py", label="Medidas Centrais")
-    st.sidebar.page_link("pages/medidas_dispersao.py", label="Medidas de Dispersão")
-    st.sidebar.page_link("pages/distribuicoes.py", label="Distribuições")
+    st.sidebar.page_link("pages/normal.py", label="Distribuição Normal")
     st.sidebar.page_link("pages/confianca.py", label="Intervalo de Confiança")
 
     st.sidebar.divider()

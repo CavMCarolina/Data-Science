@@ -16,38 +16,37 @@ df = st.session_state["data"]
 st.header("Contextualização do Problema:")
 
 col1, col2, col3 = st.columns([0.5, 0.1, 0.4])
-col1.write("Ribeirão Preto, município no interior de São Paulo, tem enfrentado desafios significativos relacionados a alagamentos urbanos decorrentes de chuvas intensas. A análise da relação entre precipitações e alagamentos na cidade é fundamental para compreender os impactos das chuvas e desenvolver estratégias eficazes de mitigação.")
+col1.write("""A precipitação intensa é um dos principais fatores que contribuem para alagamentos em diversas cidades do interior paulista. Regiões como Ribeirão Preto, São José do Rio Preto, Franca, Barretos, Catanduva e Sertãozinho possuem áreas urbanizadas onde o escoamento da água da chuva é dificultado devido à impermeabilização do solo e à drenagem inadequada. Além disso, municípios menores, como Bebedouro, Monte Alto e Pontal, também podem sofrer com enchentes devido à proximidade com rios e córregos que transbordam durante períodos chuvosos.
 
-col1.markdown("#### Histórico de Precipitações e Alagamentos")
-col1.write("Eventos de chuvas intensas têm causado alagamentos significativos em Ribeirão Preto ao longo dos anos. Em novembro de 2024, por exemplo, a cidade registrou 100 mm de chuva em 24 horas, resultando em alagamentos em diversos pontos, como a Avenida Eduardo Andrea Matarazzo (Via Norte) e bairros como Campos Elíseos e Vila Virgínia . Outro evento marcante ocorreu em dezembro de 2009, quando 94 mm de chuva foram registrados em 12 horas, desalojando 33 pessoas e alagando ruas e casas.​")
+Os impactos desses eventos vão desde prejuízos materiais para moradores e comerciantes até danos à infraestrutura urbana, como erosões, rompimento de vias e problemas na mobilidade. A análise da precipitação registrada nas estações meteorológicas dessas regiões pode fornecer informações valiosas sobre a correlação entre chuvas intensas e a ocorrência de alagamentos, permitindo prever riscos e auxiliar no planejamento urbano para mitigar danos futuros.""")
 
-col3.image("https://f.i.uol.com.br/fotografia/2023/12/23/17033455656586fd9d396b4_1703345565_3x2_md.jpg")
+col3.image("https://ogimg.infoglobo.com.br/in/25332675-485-441/FT1086A/96791326_An-aerial-view-shows-a-neighbourhood-during-flooding-caused-by-the-overflowing-Cachoeira-ri.jpg")
 
 st.markdown("#### Impactos dos Alagamentos")
-st.write("Os alagamentos em Ribeirão Preto resultam em diversos transtornos, incluindo:")
+st.write("Os impactos dos alagamentos são amplos e podem incluir:")
 st.markdown("""
     - **Desalojamento de Famílias:** Centenas de famílias já foram obrigadas a deixar suas residências devido às inundações.
-    - **Danos à Infraestrutura:** Pontes danificadas, ruas interditadas e prejuízos ao transporte público são consequências frequentes.
-    - **Prejuízos Econômicos:** Comércios afetados, veículos danificados e custos elevados para reparos urbanos impactam negativamente a economia local
+    - **Danos materiais:** Perdas em residências, comércios e indústrias devido à invasão da água.
+    - **Problemas na infraestrutura urbana:** Ruas alagadas, erosão de vias, rompimento de pavimentação e problemas na rede elétrica.
+    - **Impactos na mobilidade:** Interrupção de vias e dificuldades no transporte público e privado.
+    - **Riscos à saúde pública:** Contaminação da água, proliferação de doenças transmitidas por enchentes (como leptospirose) e aumento da umidade, favorecendo doenças respiratórias.
+    - **Prejuízos ao agronegócio:** Perdas de plantações e impactos na produção agrícola, especialmente em regiões com grandes áreas de cultivo.
 """)
 
-st.markdown("Importância da Análise de Dados de Precipitação")
-st.write("Analisar os dados de precipitação é essencial para:")
+st.header("Correlação com o Dataset:")
+st.write("O dataset contém registros de estações meteorológicas distribuídas por diversas regiões do estado de São Paulo, possibilitando uma análise detalhada da relação entre precipitação e alagamentos. Através dos dados históricos de chuva, é possível:")
 st.markdown("""
     - **Previsão de Alagamentos:** Identificar padrões de chuva que precedem inundações permite a emissão de alertas antecipados à população.
     - **Planejamento Urbano:** Compreender a relação entre volume de chuva e áreas afetadas auxilia na implementação de melhorias na infraestrutura de drenagem.​
-    - **Definição de Políticas Públicas:**  Dados precisos embasam a criação de políticas de prevenção e resposta a desastres naturais.
+    - **Definição de Políticas Públicas:** Dados precisos embasam a criação de políticas de prevenção e resposta a desastres naturais.
+    - **Identificar padrões climáticos:** Avaliar a frequência e intensidade das chuvas em diferentes períodos do ano.
+    - **Auxiliar no planejamento urbano e agrícola:** Fornecer subsídios para políticas públicas e estratégias de mitigação, como melhorias na drenagem urbana e planejamento de plantios agrícolas.       
+    - **Apoiar sistemas de alerta precoce:** Criar modelos preditivos para antecipar eventos de alagamento e minimizar danos.
 """)
 
-st.write("Diante dos desafios impostos pelos alagamentos em Ribeirão Preto, a análise detalhada dos dados de precipitação é uma ferramenta fundamental para a proteção da população e o desenvolvimento sustentável da cidade.")
-
-st.header("Correlação com o Dataset:")
-
-st.write("")
-
 st.header("Perguntas Iniciais:")
-st.write("**1-** Existe uma correlação entre o volume de precipitação e a ocorrência de alagamentos?")
-st.write("**2-** Quais são os períodos do ano com maior incidência de chuvas e como isso se relaciona com os alagamentos?")
-st.write("**3-** Há uma tendência de aumento ou diminuição das precipitações ao longo dos anos?")
-st.write("**4-** Existe um limite mínimo de precipitação a partir do qual os alagamentos começam a ocorrer?")
-st.write("**5-** O tempo de duração da chuva influencia a severidade dos alagamentos?")
+st.write("**1-** Quais regiões do dataset apresentam maior ocorrência de precipitação?")
+st.write("**2-** Quais regiões do dataset apresentam menor ocorrência de precipitação?")
+st.write("**3-** Existe um padrão sazonal na incidência de chuvas mais volumosas nas cidades analisadas?")
+st.write("**4-** Quais regiões apresentam maior quantidade de dias consecutivos chuvosos e dias consecutivos secos?")
+st.write("**5-** Há uma relação entre a estação do ano e a ocorrência de períodos consecutivos de dias chuvosos ou secos?")

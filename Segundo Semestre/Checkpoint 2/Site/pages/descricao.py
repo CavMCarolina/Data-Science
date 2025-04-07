@@ -18,13 +18,14 @@ if "data" not in st.session_state:
     st.session_state["data"] = pd.read_csv("../precipitacao.csv")
 
 df = st.session_state["data"]
+df.columns = df.columns.str.lower()
 
 # Função para formatar o df com 2 casas decimais e separador de milhar
 def formatar_df(df):
     df_formatado = df.copy()
     
     for coluna in df_formatado.select_dtypes(include=['float64', 'int64']):
-        if coluna in ['ANOINI', 'ANOFIM']:  
+        if coluna in ['anoini', 'anofim']:  
             df_formatado[coluna] = df_formatado[coluna].astype(str)  # Mantém como string sem formatação
         else:
             df_formatado[coluna] = df_formatado[coluna].apply(
@@ -33,28 +34,44 @@ def formatar_df(df):
     
     return df_formatado
 
-st.header("Descrição do Dataset:")
-st.write("O dataset contém dados sobre estações de monitoramento hidrometeorológico na região de Bebedouro e proximidades, incluindo Ribeirão Preto. Ele armazena informações como localização (coordenadas X e Y), nome da estação, responsável pela operação, e diversas estatísticas relacionadas a precipitação.")
+# Filtrar o df antes de formatar
+colunas_selecionadas = ['x', 'y', 'id', 'nm', 'respon', 'operad', 'dini', 'dfim', 'anoini', 'anofim']
 
-df_formatado = formatar_df(df)
+# Adiciona colunas com os padrões especificos
+padroes = ['anual', 'jan', 'fev', 'mar','abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez', 'djf', 'mam', 'jja', 'son', 'cwd', 'cdd']
+for col in df.columns:
+  for padrao in padroes:
+    if padrao in col.lower():
+      if col not in colunas_selecionadas:
+        colunas_selecionadas.append(col)
+
+df_filtrado = df[colunas_selecionadas]
+df_formatado = formatar_df(df_filtrado)
+
+st.header("Descrição do Dataset:")
+st.write("O dataset contém dados sobre estações de monitoramento hidrometeorológico na região de Bebedouro e proximidades. Ele foi filtrado de maneira que mostra as precipitações anuais, mensais e sazonais de cada estação meteorológica.")
+
 st.dataframe(df_formatado)
 
 st.header("Identificação das Variáveis:")
 st.write("**X, Y** = Coordenadas geográficas (longitude e latitude).")
-st.write("**OBJECTID, ID** = Identificadores internos dos registros.")
-st.write("**CD, CDALT** = Códigos que podem estar relacionados a estações meteorológicas.")
+st.write("**ID** = Identificador interno dos registros.")
 st.write("**NM** = Nome da estação meteorológica.")
-st.write("**RESPON** = Órgão responsável pela estação (exemplo: DAEE-SP, ANA).")
-st.write("**OPERAD** = Operador da estação (quem faz a manutenção e coleta os dados).")
-st.write("**MESMAX, MESMIN** = Mês com maior e menor precipitação.")
-st.write("**BIMMAX, BIMMIN** = Bimestre com maior e menor precipitação. ")
-st.write("**TRIMAX, TRIMIN** = Trimestre com maior e menor precipitação.")
-st.write("**QUAMAX, QUAMIN** = Quadrimestre com maior e menor precipitação.")
-st.write("**SEMMAX, SEMMIN** = Semestre com maior e menor precipitação.")
-# RIO, DINI, DFIM, ANOINI, ANOFIM, EMOPER, ADKM2, PCBRUT, PCCONS, PCFALH, NANOSF, NSF10PF, N_ANUAL, MED_ANUAL, DP_ANUAL, CV_ANUAL, MIN_ANUAL, MAX_ANUAL, N_JAN, MED_JAN.
-# VERIFICAR SE MED_ANUAL, MAX_ANUAL ou PCBRUT estão relacionadas à precipitação.
-st.write("**X, Y** = ")
-st.write("**X, Y** = ")
-
+st.write("**Respon** = Órgão responsável pela estação (exemplo: DAEE-SP, ANA).")
+st.write("**Operad** = Operador da estação (quem faz a manutenção e coleta os dados).")
+st.write("**Dini, Dfim, Anoini, Anofim** = Representa o intervalo em que os dados foram calculados.")
+st.write("**DJF** = Indica o verão: Dezembro, Janeiro e Fevereiro.")
+st.write("**MAM** = Indica a primavera: Março, Abril e Maio.")
+st.write("**JJA** = Indica o inverno: Junho, Julho e Agosto.")
+st.write("**SON** = Indica o outono: Setembro, Outubro e Novembro.")
+st.write("**CWD** = Dias chuvosos consecutivos.")
+st.write("**CDD** = Dias secos consecutivos.")
+st.write("**N** = Número de dados válidos dentro daquela categoria. No dataset temos o n de todas as variáveis de precipitação (anual, mensal, sazonal e períodos chuvosos e secos.")
+st.write("**Med** = Média daquela categoria. No dataset temos a média de todas as variáveis de precipitação (anual, mensal, sazonal e períodos chuvosos e secos).")
+st.write("**DP** = Desvio padrão daquela categoria. No dataset temos o desvio padrão de todas as variáveis de precipitação (anual, mensal, sazonal e períodos chuvosos e secos).")
+st.write("**CV** = Coeficiente de variação daquela categoria. No dataset temos o coeficiente de variação de todas as variáveis de precipitação (anual, mensal, sazonal e períodos chuvosos e secos).")
+st.write("**Min** = Mínimo daquela categoria. No dataset temos o mínimo de todas as variáveis de precipitação (anual, mensal, sazonal e períodos chuvosos e secos).")
+st.write("**Max** = Máximo daquela categoria. No dataset temos o máximo de todas as variáveis de precipitação (anual, mensal, sazonal e períodos chuvosos e secos).")
+st.write("**Q25, Q75** = Primeiro e terceiro quartil daquela categoria. No dataset temos o q25 e o q75 das variáveis cwd e cdd (períodos chuvosos e secos).")
 
 show_sidebar()
