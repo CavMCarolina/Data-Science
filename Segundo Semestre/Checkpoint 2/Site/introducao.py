@@ -5,6 +5,14 @@ from sidebar import show_sidebar
 st.set_page_config(page_title="Checkpoint 2", layout="wide", page_icon="images/icon2.png")
 st.logo("images/icon2.png")
 
+# Função para aplicar o css :)
+def load_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+css_file = "scss/style.css"
+load_css(css_file)
+
 show_sidebar()
 
 # Deixar o arquivo na memória
@@ -46,7 +54,7 @@ st.markdown("""
 
 st.header("Perguntas Iniciais:")
 st.write("**1-** Quais regiões do dataset apresentam maior ocorrência de precipitação?")
-st.write("**2-** Quais regiões do dataset apresentam menor ocorrência de precipitação?")
+st.write("**2-** Como a instabilidade na precipitação (desvio padrão alto) impacta a frequência de eventos extremos (chuvas longas ou secas)?")
 st.write("**3-** Existe um padrão sazonal na incidência de chuvas mais volumosas nas cidades analisadas?")
 st.write("**4-** Quais regiões apresentam maior quantidade de dias consecutivos chuvosos e dias consecutivos secos?")
 st.write("**5-** Há uma relação entre a estação do ano e a ocorrência de períodos consecutivos de dias chuvosos ou secos?")

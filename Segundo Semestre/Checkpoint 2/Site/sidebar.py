@@ -23,10 +23,6 @@ def show_sidebar():
     st.sidebar.divider()
 
     st.sidebar.write("📊 **Discussão**")
-    st.sidebar.page_link("pages/medidas_centrais.py", label="Medidas Centrais")
-    st.sidebar.page_link("pages/medidas_centrais.py", label="Medidas Centrais")
-    st.sidebar.page_link("pages/medidas_centrais.py", label="Medidas Centrais")
-    st.sidebar.page_link("pages/medidas_centrais.py", label="Medidas Centrais")
 
     st.sidebar.divider()
 
