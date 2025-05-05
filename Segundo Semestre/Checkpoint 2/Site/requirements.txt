@@ -2,4 +2,7 @@ pandas
 streamlit
 plotly
 plotnine
-scipy.stats
+scipy
+numpy
+pymannkendall
+geopy
