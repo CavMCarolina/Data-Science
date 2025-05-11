@@ -2,9 +2,11 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from scipy.stats import ttest_ind
-import pymannkendall as mk
 from sidebar import show_sidebar
 from geopy import distance
+import numpy as np
+import plotly.graph_objects as go
+from pymannkendall import original_test
 
 st.set_page_config(page_title="Checkpoint 2", layout="wide", page_icon="images/icon2.png")
 st.logo("images/icon2.png")
@@ -36,10 +38,6 @@ for col in df.columns:
 
 df_filtrado = df[colunas_selecionadas]
 
-# Função para calcular a distância
-def calcular_distancia(df, referencia):
-    return df.apply(lambda row: distance.distance((row["y"], row["x"]), referencia).km, axis=1)
-
 st.header("Teste de Hipóteses:")
 st.markdown("""
 Um teste de hipótese é um procedimento estatístico usado para avaliar suposições sobre uma população com base em uma amostra de dados. Com ele, podemos verificar se duas ou mais amostras apresentam diferenças estatísticas reais, ou se essas diferenças podem ter ocorrido por acaso.
@@ -60,28 +58,32 @@ st.markdown("""
 
 st.divider()
 
-st.header("Hipóteses do Estudo:")
-st.markdown("""
-**Hipótese Nula (H0):** As estações mais próximas da estação mais chuvosa não apresentam diferença significativa na média de precipitação anual em comparação às estações mais distantes.
-<br>
-**Hipótese Alternativa (H1):** As estações mais próximas da estação mais chuvosa apresentam diferença significativa na média de precipitação anual em relação às estações mais distantes.
+teste = st.selectbox("Selecione um teste:", ["Teste T de Student", "Teste S de Mann-Kendall"])
 
-Também queremos verificar **tendências temporais** nas médias mensais da estação mais chuvosa, da estação mais próxima e da mais distante.
-""", unsafe_allow_html=True)
+# Função para calcular a distância
+def calcular_distancia(df, referencia):
+    return df.apply(lambda row: distance.distance((row["y"], row["x"]), referencia).km, axis=1)
 
-st.divider()
-
-mais_chuvosa = df_filtrado.sort_values("med_anual", ascending=False).iloc[0]
-estacao_mais_chuvosa = df_filtrado[df_filtrado["nm"] == mais_chuvosa["nm"]]
-outros = df_filtrado[df_filtrado["nm"] != mais_chuvosa["nm"]]
-
-teste = st.selectbox("Selecione um teste:", ["Teste T de Student", "Teste de Mann-Kendall"])
 
 if teste == "Teste T de Student":
-    st.subheader("Teste T de Student")
+    st.header("Teste T de Student")
     st.markdown("""
-   O Teste T de Student é uma técnica estatística utilizada para comparar as médias de dois grupos e verificar se há uma diferença significativa entre elas. Ele parte da hipótese de que não existe diferença real nas médias (hipótese nula) e calcula a probabilidade de observarmos uma diferença tão grande quanto a encontrada apenas por acaso. Essa probabilidade é representada pelo valor de p. Quando o p-valor é menor ou igual ao nível de significância adotado (geralmente 0,05), rejeita-se a hipótese nula e conclui-se que as médias dos grupos são significativamente diferentes. Esse teste é bastante útil quando se tem dados que seguem uma distribuição aproximadamente normal.
+    O Teste T de Student é uma técnica estatística utilizada para comparar as médias de dois grupos e verificar se há uma diferença significativa entre elas. Ele parte da hipótese de que não existe diferença real nas médias (hipótese nula) e calcula a probabilidade de observarmos uma diferença tão grande quanto a encontrada apenas por acaso. Essa probabilidade é representada pelo valor de p. Quando o p-valor é menor ou igual ao nível de significância adotado (geralmente 0,05), rejeita-se a hipótese nula e conclui-se que as médias dos grupos são significativamente diferentes. Esse teste é bastante útil quando se tem dados que seguem uma distribuição aproximadamente normal.
     """)
+    
+    st.divider()
+
+    st.subheader("Hipóteses do Estudo:")
+    st.markdown("""
+    **Hipótese Nula (H0):** As estações mais próximas da estação mais chuvosa não apresentam diferença significativa na média de precipitação anual em comparação às estações mais distantes.
+    <br>
+    **Hipótese Alternativa (H1):** As estações mais próximas da estação mais chuvosa apresentam diferença significativa na média de precipitação anual em relação às estações mais distantes.
+    """, unsafe_allow_html=True)
+
+    # Variaveis para o teste
+    mais_chuvosa = df_filtrado.sort_values("med_anual", ascending=False).iloc[0]
+    estacao_mais_chuvosa = df_filtrado[df_filtrado["nm"] == mais_chuvosa["nm"]]
+    outros = df_filtrado[df_filtrado["nm"] != mais_chuvosa["nm"]]
 
     # Calcular distâncias para a estação mais chuvosa
     outros = outros.copy()
@@ -93,7 +95,7 @@ if teste == "Teste T de Student":
     meio = len(outros_ordenado) // 2
     grupo_proximas, grupo_distantes = outros_ordenado.iloc[:meio], outros_ordenado.iloc[meio:]
 
-    # Teste T de Student
+    # Teste T de Student e p_valor
     t_stat, p_valor = ttest_ind(grupo_proximas["med_anual"], grupo_distantes["med_anual"], equal_var=False)
 
     # Adicionando grupo para visualização
@@ -153,103 +155,98 @@ if teste == "Teste T de Student":
     - {len(grupo_distantes)} estações mais distantes
 
     **Resultado do Teste T:**
-    - Estatística t: `{t_stat:.2f}`
-    - Valor p: `{p_valor:.4f}`
+    - Estatística t: {t_stat:.2f}
+    - Valor p: {p_valor:.4f}
     """)
 
-
-
 else:
-    st.subheader("Teste de Mann-Kendall")
+    st.header("Teste S de Mann-Kendall")
     st.markdown("""
     O Teste de Mann-Kendall é um teste estatístico não paramétrico amplamente utilizado para identificar a presença de tendências em séries temporais, como dados climáticos ao longo dos anos. Ele verifica se há uma tendência monotônica (ou seja, que só aumenta ou só diminui) sem exigir que os dados sigam uma distribuição específica. Através da comparação entre pares de valores ao longo do tempo, o teste estima se há um padrão de crescimento ou declínio consistente. Se o p-valor do teste for inferior ao nível de significância (por exemplo, 0,05), considera-se que a tendência é estatisticamente significativa. É uma ferramenta valiosa em estudos ambientais, especialmente para detectar mudanças de longo prazo.
     """)
 
-    coords_mais_chuvosa = (mais_chuvosa['y'], mais_chuvosa['x'])
-    df_filtrado['distancia'] = df_filtrado.apply(lambda row: distance.distance((row['y'], row['x']), coords_mais_chuvosa).km, axis=1)
-    mais_proxima = df_filtrado[df_filtrado['nm'] != mais_chuvosa['nm']].sort_values("distancia").iloc[0]
-    mais_distante = df_filtrado[df_filtrado['nm'] != mais_chuvosa['nm']].sort_values("distancia", ascending=False).iloc[0]
+    st.divider()
 
-    # Medias mensais das 3 estações
-    meses = ["med_jan", "med_fev", "med_mar", "med_abr", "med_mai", "med_jun", "med_jul", "med_ago", "med_set", "med_out", "med_nov", "med_dez"]
-    labels = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
-
-    data_plot = pd.DataFrame({
-        "Mês": labels,
-        mais_chuvosa["nm"]: mais_chuvosa[meses].values,
-        mais_proxima["nm"]: mais_proxima[meses].values,
-        mais_distante["nm"]: mais_distante[meses].values
-    })
-
-    fig2 = px.line(data_plot, x="Mês", y=data_plot.columns[1:], markers=True,
-                title="Tendência Mensal das Médias de Precipitação",
-                labels={"value": "Precipitação (mm)", "variable": "Estação"})
-    st.plotly_chart(fig2, use_container_width=True)
-
-    # Resultados do teste de Mann-Kendall
-    st.markdown("**Resultados do Teste de Mann-Kendall (Tendência nas Médias Mensais):**")
-
-    for estacao in [mais_chuvosa, mais_proxima, mais_distante]:
-        resultado = mk.original_test(estacao[meses])
-        nome = estacao["nm"]
-        st.markdown(f"- {nome}: Tendência = `{resultado.trend}`, p-valor = `{resultado.p:.4f}`")
-
-    # Encontrar a estação mais chuvosa
-    mais_chuvosa = df_filtrado.sort_values("med_anual", ascending=False).iloc[0]
-    estacao_mais_chuvosa = df_filtrado[df_filtrado["nm"] == mais_chuvosa["nm"]]
-    outros = df_filtrado[df_filtrado["nm"] != mais_chuvosa["nm"]]
-
-    # Calcular a distância das outras estações para a mais chuvosa
-    referencia_chuvosa = (mais_chuvosa["y"], mais_chuvosa["x"])
-    outros["distancia"] = calcular_distancia(outros, referencia_chuvosa)
-
-    # Ordenar as estações pela distância
-    outros_ordenado = outros.sort_values("distancia")
-    meio = len(outros_ordenado) // 2
-    grupo_proximas, grupo_distantes = outros_ordenado.iloc[:meio], outros_ordenado.iloc[meio:]
-
-    # Teste de Mann-Kendall
-    def mann_kendall_teste(grupo):
-        # Teste de Mann-Kendall nas médias anuais para as estações
-        resultado = mk.original_test(grupo["med_anual"])
-        return resultado
-
-    # Realizar o teste para os dois grupos (mais próximos e mais distantes)
-    resultado_proximas = mann_kendall_teste(grupo_proximas)
-    resultado_distantes = mann_kendall_teste(grupo_distantes)
-
-    # Exibir os resultados do teste
-    st.title("Teste de Mann-Kendall - Tendência de Precipitação Anual")
+    st.subheader("Hipóteses do Estudo:")
     st.markdown("""
-        O Teste de Mann-Kendall é utilizado para identificar tendências monotônicas em séries temporais, sem exigir que os dados sigam uma distribuição específica. Aqui, verificaremos se há tendência significativa na precipitação anual entre as estações mais próximas e as mais distantes da estação mais chuvosa.
-    """)
+    **Hipótese Nula (H0):** Não há variação significativa na precipitação entre os meses de junho e julho nas regiões: mais chuvosa, mais próxima e mais distante da primeira.
+    <br>
+    **Hipótese Alternativa (H1):** Há variação significativa na precipitação entre os meses de junho e julho nas regiões: mais chuvosa, mais próxima e mais distante da primeira.
+    """, unsafe_allow_html=True)
 
-    # Mostrar resultados
-    st.subheader("Resultados do Teste de Mann-Kendall:")
-    st.markdown(f"**Estação Mais Próxima**: Tendência = `{resultado_proximas.trend}`, p-valor = `{resultado_proximas.p:.4f}`")
-    st.markdown(f"**Estação Mais Distante**: Tendência = `{resultado_distantes.trend}`, p-valor = `{resultado_distantes.p:.4f}`")
+    # Encontre a estação mais chuvosa
+    estacao_mais_chuvosa = df_filtrado.loc[df_filtrado['med_anual'].idxmax()]
 
-    # Gráfico de tendência mensal para a estação mais chuvosa, a mais próxima e a mais distante
-    meses = ["med_jan", "med_fev", "med_mar", "med_abr", "med_mai", "med_jun", "med_jul", "med_ago", "med_set", "med_out", "med_nov", "med_dez"]
-    labels = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
+    # Calcule as distâncias entre a estação mais chuvosa e as demais
+    distances = []
+    for index, row in df_filtrado.iterrows():
+        distance = np.sqrt((row['x'] - estacao_mais_chuvosa['x'])**2 + (row['y'] - estacao_mais_chuvosa['y'])**2)
+        distances.append(distance)
 
-    # Preparar dados para o gráfico (transformação para formato longo)
-    data_plot = pd.DataFrame({
-        "Mês": labels,
-        mais_chuvosa["nm"]: mais_chuvosa[meses].values,
-        grupo_proximas["nm"].iloc[0]: grupo_proximas[meses].values[0],  # Considerando o primeiro valor de cada grupo para o gráfico
-        grupo_distantes["nm"].iloc[0]: grupo_distantes[meses].values[0]
-    })
+    df_filtrado['distance'] = distances
 
-    # Reorganizar os dados para formato longo usando pd.melt()
-    data_plot_long = pd.melt(data_plot, id_vars=["Mês"], var_name="Estação", value_name="Precipitação (mm)")
+    # Encontre a estação mais próxima
+    segunda_mais_proxima = df_filtrado.sort_values(by='distance').iloc[1]
 
-    # Gráfico de tendência das médias mensais
-    fig = px.line(data_plot_long, x="Mês", y="Precipitação (mm)", color="Estação", markers=True,
-                title="Tendência Mensal das Médias de Precipitação",
-                labels={"Precipitação (mm)": "Precipitação (mm)", "Estação": "Estação"})
+    # Encontre a estação mais distante
+    mais_distante = df_filtrado.sort_values(by='distance').iloc[-1]
+
+    st.write(f"Estação mais chuvosa: {estacao_mais_chuvosa['nm']}")
+    st.write(f"Estação mais próxima da mais chuvosa: {segunda_mais_proxima['nm']}")
+    st.write(f"Estação mais distante da mais chuvosa: {mais_distante['nm']}")
+
+    # combinar as estações em um grupo
+    stations = [estacao_mais_chuvosa['nm'], segunda_mais_proxima['nm'], mais_distante['nm']]
+    station_data = df_filtrado[df_filtrado['nm'].isin(stations)]
+
+    # Criando gráfico de barras para comparação
+    fig = go.Figure()
+
+    for station in stations:
+        station_df = station_data[station_data['nm'] == station]
+        fig.add_trace(go.Bar(
+            x=['Junho', 'Julho'],
+            y=[station_df['med_jun'].iloc[0], station_df['med_jul'].iloc[0]],
+            name=station
+        ))
+
+    fig.update_layout(
+        title="Comparação das médias de precipitação em Junho e Julho",
+        xaxis_title="Mês",
+        yaxis_title="Média de precipitação (mm)",
+        barmode='group'
+    )
+
     st.plotly_chart(fig, use_container_width=True)
 
-    # Mais distante = diminuindo (tendencia negativa)
+    # Criando Teste S de Mann-Kendall
+    jun_data = []
+    jul_data = []
+    for station in stations:
+        station_df = station_data[station_data['nm'] == station]
+        jun_data.append(station_df['med_jun'].iloc[0])
+        jul_data.append(station_df['med_jul'].iloc[0])
+
+    # Combine os dados de junho e julho em uma única lista
+    combined_data = []
+    for i in range(len(stations)):
+        combined_data.append(jun_data[i])
+        combined_data.append(jul_data[i])
+
+    # Resultado do teste com os dados combinados
+    result = original_test(combined_data)
+
+    st.subheader("Resultado do Teste:")
+    st.markdown(f"""
+        **Conclusão:**  
+        {"Rejeitamos" if result.p <= 0.05 else "Não rejeitamos"} a hipótese nula ao nível de significância de 5%.  
+        As estações mais chuvosa, mais próxima da chuvosa e mais distante da chuvosa possuem precipitação {"com variação significante de junho para julho." if result.p <= 0.05 else "sem variação significante de junho para julho."} Inclusive, mostrando tendência decrescente.
+
+        **Resultado do Teste T:**
+        - Trend: {result.trend}
+        - Estatística s: {result.s}
+        - Valor p: {result.p:.4f}
+    """)
+
 
 show_sidebar()
