@@ -75,4 +75,26 @@ fig.update_layout(
 
 st.plotly_chart(fig)
 
+# Supondo que df_10 já esteja definido e contenha as colunas 'med_djf', 'med_mam', 'med_jja', 'med_son'
+
+estacoes = ['djf', 'mam', 'jja', 'son']
+fig = go.Figure()
+
+for index, row in df_10.iterrows():
+  medias_estacoes = [row[f'med_{estacao}'] for estacao in estacoes]
+  fig.add_trace(go.Bar(
+      x=estacoes,
+      y=medias_estacoes,
+      name=index
+  ))
+
+fig.update_layout(
+    title="Médias Sazonais de Precipitação para as 10 Regiões Mais Chuvosas",
+    xaxis_title="Estação do Ano",
+    yaxis_title="Média Sazonal de Precipitação (mm)",
+    barmode='group' # Agrupa as barras para melhor visualização
+)
+
+st.plotly_chart(fig)
+
 show_sidebar()
