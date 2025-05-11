@@ -20,6 +20,7 @@ def show_sidebar():
     st.sidebar.page_link("pages/normal.py", label="Distribuição Normal")
     st.sidebar.page_link("pages/confianca.py", label="Intervalo de Confiança")
     st.sidebar.page_link("pages/hipotese.py", label="Teste de Hipóteses")
+    st.sidebar.page_link("pages/regional.py", label="Regional")
 
     st.sidebar.divider()
 

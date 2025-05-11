@@ -57,77 +57,7 @@ st.write("""
 
 st.divider()
 
-# filtro = st.selectbox("Escolha um filtro para o gráfico:", ["Todas as Regiões", "10 Regiões Mais Chuvosas"])
-
-# if filtro == "Todas as Regiões":
-#     st.header("Todas as Regioes")
-
-#     # Criar listas para os dados do gráfico
-#     regioes = df_filtrado['nm'].tolist()
-#     medias = df_filtrado['med_anual'].tolist()
-#     desvios = df_filtrado['dp_anual'].tolist()
-
-#     # Calcular os limites inferior e superior do intervalo de confiança (95%)
-#     limite_inferior = [media - 1.96 * desvio for media, desvio in zip(medias, desvios)]
-#     limite_superior = [media + 1.96 * desvio for media, desvio in zip(medias, desvios)]
-
-#     # Criar o gráfico
-#     fig = go.Figure()
-
-#     # Adicionar os intervalos de confiança como linhas verticais
-#     for i, regiao in enumerate(regioes):
-#         fig.add_trace(go.Scatter(
-#             x=[limite_inferior[i], limite_superior[i]],
-#             y=[regiao, regiao],
-#             mode='lines',
-#             line=dict(color='red', width=2),
-#             name=f"Intervalo de Confiança ({regiao})",
-#             showlegend=False  # Evitar repetição na legenda
-#         ))
-
-#     # Adicionar os pontos das médias com cores diferentes para cada região
-#     for i, regiao in enumerate(regioes):
-#         fig.add_trace(go.Scatter(
-#             x=[medias[i]],
-#             y=[regioes[i]],
-#             mode='markers',
-#             marker=dict(size=8, color=f"rgba({i*25 % 255}, {i*50 % 255}, {i*75 % 255}, 1)"),  # Cores únicas
-#             name=f"Média ({regiao})"
-#         ))
-
-#     # Adicionar os pontos para o limite inferior
-#     fig.add_trace(go.Scatter(
-#         x=limite_inferior,
-#         y=regioes,
-#         mode='markers',
-#         marker=dict(color='blue', size=6, symbol='circle'),
-#         name='Limite Inferior'
-#     ))
-
-#     # Adicionar os pontos para o limite superior
-#     fig.add_trace(go.Scatter(
-#         x=limite_superior,
-#         y=regioes,
-#         mode='markers',
-#         marker=dict(color='orange', size=6, symbol='circle'),
-#         name='Limite Superior'
-#     ))
-
-#     # Configurar o layout do gráfico
-#     fig.update_layout(
-#         title="Intervalos de Confiança (95%) por Região",
-#         xaxis_title="Precipitação (mm)",
-#         yaxis_title="Regiões",
-#         template="plotly_white",
-#         height=800,  # Ajustar a altura para acomodar todas as regiões
-#         yaxis=dict(tickmode='linear', automargin=True)  # Garantir que os nomes fiquem visíveis
-#     )
-
-#     # Exibir o gráfico no Streamlit
-#     st.plotly_chart(fig)
-
-# elif filtro == "10 Regiões Mais Chuvosas":  
-st.header("10 Regiões Mais Chuvosas")
+st.header("10 Regiões Mais Chuvosas:")
 
 # Pegar apenas os top 10 lugares mais chuvosos do df (top 11 pq tem duas Francas)
 top_10_chuvosos = df_filtrado.nlargest(11, 'med_anual').sort_values('med_anual')

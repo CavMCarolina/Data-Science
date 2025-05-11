@@ -66,7 +66,7 @@ def calcular_distancia(df, referencia):
 
 
 if teste == "Teste T de Student":
-    st.header("Teste T de Student")
+    st.header("Teste T de Student:")
     st.markdown("""
     O Teste T de Student é uma técnica estatística utilizada para comparar as médias de dois grupos e verificar se há uma diferença significativa entre elas. Ele parte da hipótese de que não existe diferença real nas médias (hipótese nula) e calcula a probabilidade de observarmos uma diferença tão grande quanto a encontrada apenas por acaso. Essa probabilidade é representada pelo valor de p. Quando o p-valor é menor ou igual ao nível de significância adotado (geralmente 0,05), rejeita-se a hipótese nula e conclui-se que as médias dos grupos são significativamente diferentes. Esse teste é bastante útil quando se tem dados que seguem uma distribuição aproximadamente normal.
     """)
@@ -160,7 +160,7 @@ if teste == "Teste T de Student":
     """)
 
 else:
-    st.header("Teste S de Mann-Kendall")
+    st.header("Teste S de Mann-Kendall:")
     st.markdown("""
     O Teste de Mann-Kendall é um teste estatístico não paramétrico amplamente utilizado para identificar a presença de tendências em séries temporais, como dados climáticos ao longo dos anos. Ele verifica se há uma tendência monotônica (ou seja, que só aumenta ou só diminui) sem exigir que os dados sigam uma distribuição específica. Através da comparação entre pares de valores ao longo do tempo, o teste estima se há um padrão de crescimento ou declínio consistente. Se o p-valor do teste for inferior ao nível de significância (por exemplo, 0,05), considera-se que a tendência é estatisticamente significativa. É uma ferramenta valiosa em estudos ambientais, especialmente para detectar mudanças de longo prazo.
     """)

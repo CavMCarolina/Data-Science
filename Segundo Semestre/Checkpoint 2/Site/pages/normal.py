@@ -62,7 +62,7 @@ regioes = {
   'Fazenda Santa Cecília': 'FAZENDA SANTA CECÍLIA'
 }
 
-st.subheader("Distribuição Normal da Precipitação Anual:")
+st.header("Distribuição Normal da Precipitação Anual:")
 
 st.markdown("""
   A distribuição normal é uma das distribuições de probabilidade mais importantes na estatística. Ela é caracterizada por sua forma simétrica em torno da média, o que significa que a maioria dos dados se concentra em torno desse valor central, com menos dados se afastando dele. A distribuição normal é definida por dois parâmetros principais: a média (μ) e o desvio padrão (σ). <br>
