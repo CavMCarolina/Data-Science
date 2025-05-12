@@ -45,7 +45,6 @@ st.header("Correlação com o Dataset:")
 st.write("O dataset contém registros de estações meteorológicas distribuídas por diversas regiões do estado de São Paulo, possibilitando uma análise detalhada da relação entre precipitação e alagamentos. Através dos dados históricos de chuva, é possível:")
 st.markdown("""
     - **Previsão de Alagamentos:** Identificar padrões de chuva que precedem inundações permite a emissão de alertas antecipados à população.
-    - **Planejamento Urbano:** Compreender a relação entre volume de chuva e áreas afetadas auxilia na implementação de melhorias na infraestrutura de drenagem.​
     - **Definição de Políticas Públicas:** Dados precisos embasam a criação de políticas de prevenção e resposta a desastres naturais.
     - **Identificar padrões climáticos:** Avaliar a frequência e intensidade das chuvas em diferentes períodos do ano.
     - **Auxiliar no planejamento urbano e agrícola:** Fornecer subsídios para políticas públicas e estratégias de mitigação, como melhorias na drenagem urbana e planejamento de plantios agrícolas.       
