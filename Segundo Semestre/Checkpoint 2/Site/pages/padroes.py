@@ -259,8 +259,11 @@ elif analise == "Por Períodos":
     st.markdown("""
     A análise evidencia que, mesmo em regiões muito chuvosas, os dias de chuva não necessariamente ocorrem de forma contínua. Pelo contrário, são intercalados com períodos secos mais longos, mas quando a chuva ocorre, ela é intensa o suficiente para gerar alagamentos e extremos climáticos. Essa informação é valiosa para o planejamento urbano e a gestão de riscos, pois mostra que não é apenas a frequência de chuva que importa, mas também sua intensidade e distribuição no tempo.
                 
-    - Estação com maior média de dias consecutivos chuvosos: **São José do Rio Preto** (med_cwd = 2.5)
-    - Estação com maior média de dias consecutivos secos: **São José do Rio Preto** (med_cdd = 7.5)
+    - Estação com maior média de dias consecutivos chuvosos: **São Joaquim da Barra** (med_cwd = 2.5)
+    - Estação com maior média de dias consecutivos secos: **Fazenda Floresta** (med_cdd = 17.25)
+    
+    - Estação com menor média de dias consecutivos chuvosos: **Fazenda Floresta** (med_cwd = 7.6)
+    - Estação com menor média de dias consecutivos secos: **Franca** (med_cdd = 43.15)
     """)
 
 else:
