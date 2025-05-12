@@ -4,5 +4,4 @@ plotly==5.19.0
 plotnine==0.12.4
 scipy==1.11.4
 numpy==1.26.2
-pymannkendall==1.4
 geopy==2.4.1
